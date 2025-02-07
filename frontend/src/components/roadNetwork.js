@@ -1,6 +1,6 @@
 'use client';
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+import { roadNetworkApi } from '../services/api';
 
 const RoadNetwork = () => {
   const [roads, setRoads] = useState({});
@@ -15,7 +15,7 @@ const RoadNetwork = () => {
 
   const fetchRoads = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/roads');
+      const response = await roadNetworkApi.getRoads();
       setRoads(response.data);
     } catch (err) {
       setError('Failed to fetch roads');
@@ -24,7 +24,7 @@ const RoadNetwork = () => {
 
   const handleAddVehicle = async (road, vehicleType) => {
     try {
-      await axios.post('http://localhost:5000/add-vehicle', { road, type: vehicleType });
+      await roadNetworkApi.addVehicle({ road, type: vehicleType });
       await fetchRoads();
     } catch (err) {
       setError('Failed to add vehicle');
@@ -33,7 +33,7 @@ const RoadNetwork = () => {
 
   const handleRemoveVehicle = async (road, vehicleType) => {
     try {
-      await axios.post('http://localhost:5000/remove-vehicle', { road, type: vehicleType });
+      await roadNetworkApi.removeVehicle({ road, type: vehicleType });
       await fetchRoads();
     } catch (err) {
       setError('Failed to remove vehicle');
@@ -42,7 +42,7 @@ const RoadNetwork = () => {
 
   const findRoute = async () => {
     try {
-      const response = await axios.get(`http://localhost:5000/route?start=${start}&end=${end}`);
+      const response = await roadNetworkApi.findRoute(start, end);
       setRoute(response.data.route);
     } catch (err) {
       setError('Failed to find route');
