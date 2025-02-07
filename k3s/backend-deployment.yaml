@@ -1,0 +1,68 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: road-network-backend
+  namespace: my
+spec:
+  replicas: 1
+  revisionHistoryLimit: 0
+  selector:
+    matchLabels:
+      app: road-network-backend
+  template:
+    metadata:
+      labels:
+        app: road-network-backend
+    spec:
+      restartPolicy: Always
+      nodeSelector:
+        kubernetes.io/hostname: master-node
+      imagePullSecrets:
+      - name: my-regcred
+      containers:
+      - name: road-network-backend
+        image: registry.reinhardjs.my.id/road-network-backend:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 5000
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: road-network-backend
+  namespace: my
+spec:
+  selector:
+    app: road-network-backend
+  ports:
+    - protocol: TCP
+      port: 5000
+      targetPort: 5000
+  type: ClusterIP
+
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: road-network-backend-ingress
+  namespace: my
+  annotations:
+    traefik.ingress.kubernetes.io/ssl-cert: "reinhardjs-my-id-tls-secret"
+    traefik.ingress.kubernetes.io/ssl-redirect: "true"
+spec:
+  rules:
+  - host: api-road-network.reinhardjs.my.id
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: road-network-backend
+            port:
+              number: 5000
+  tls:
+  - hosts:
+    - api-road-network.reinhardjs.my.id
+    secretName: reinhardjs-my-id-tls-secret
