@@ -19,6 +19,14 @@ class Road {
       this.congestion -= congestionValues[type] || 0;
       if (this.congestion < 0) this.congestion = 0;
   }
+
+  toJSON() {
+      return {
+          name: this.name,
+          congestion: this.congestion,
+          connections: this.connections.map(conn => conn.name)
+      };
+  }
 }
 
-export default Road;
+module.exports = Road;

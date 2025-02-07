@@ -59,6 +59,18 @@ class RoadNetwork {
     calculateCongestion(route) {
         return route.reduce((total, roadName) => total + this.roads[roadName].congestion, 0);
     }
+
+    toJSON() {
+        return Object.fromEntries(
+            Object.entries(this.roads).map(([name, road]) => [
+                name,
+                {
+                    congestion: road.congestion,
+                    connections: road.connections.map(conn => conn.name)
+                }
+            ])
+        );
+    }
 }
 
-export default RoadNetwork;
+module.exports = RoadNetwork;
