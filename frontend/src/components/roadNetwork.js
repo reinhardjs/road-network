@@ -59,43 +59,9 @@ const RoadNetwork = () => {
         </div>
       )}
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-        {Object.entries(roads).map(([name, road]) => (
-          <div key={name} className="border p-4 rounded shadow">
-            <h3 className="font-semibold">{name}</h3>
-            <p>Congestion: {road.congestion}</p>
-            <div className="mt-2 flex flex-col gap-2">
-              <select
-                id={`vehicle-${name}`}
-                className="border p-2 rounded"
-                defaultValue="Car"
-              >
-                <option value="Bike">Bike</option>
-                <option value="Car">Car</option>
-                <option value="Bus">Bus</option>
-              </select>
-              <div className="flex gap-2">
-                <button
-                  onClick={() => handleAddVehicle(name, document.getElementById(`vehicle-${name}`).value)}
-                  className="bg-blue-500 text-white px-3 py-1 rounded flex-1"
-                >
-                  Add Vehicle
-                </button>
-                <button
-                  onClick={() => handleRemoveVehicle(name, document.getElementById(`vehicle-${name}`).value)}
-                  className="bg-red-500 text-white px-3 py-1 rounded flex-1"
-                >
-                  Remove Vehicle
-                </button>
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
-
       <div className="mb-6">
-        <h2 className="text-xl font-semibold mb-2">Find Route</h2>
-        <div className="flex gap-2 mb-4">
+        <h2 className="text-xl font-semibold mb-2 text-center">Find Route</h2>
+        <div className="flex gap-2 mb-4 justify-center">
           <select
             value={start}
             onChange={(e) => setStart(e.target.value)}
@@ -129,6 +95,48 @@ const RoadNetwork = () => {
             <p>{route.join(' > ')}</p>
           </div>
         )}
+
+        <div className="w-full flex justify-center my-8">
+          <img 
+            src="/images/map.png" 
+            alt="Road Network Map" 
+            className="max-w-xl w-full rounded-lg shadow-lg"
+          />
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+        {Object.entries(roads).map(([name, road]) => (
+          <div key={name} className="border p-4 rounded shadow">
+            <h3 className="font-semibold">{name}</h3>
+            <p>Congestion: {road.congestion}</p>
+            <div className="mt-2 flex flex-col gap-2">
+              <select
+                id={`vehicle-${name}`}
+                className="border p-2 rounded"
+                defaultValue="Car"
+              >
+                <option value="Bike">Bike</option>
+                <option value="Car">Car</option>
+                <option value="Bus">Bus</option>
+              </select>
+              <div className="flex gap-2">
+                <button
+                  onClick={() => handleAddVehicle(name, document.getElementById(`vehicle-${name}`).value)}
+                  className="bg-blue-500 text-white px-3 py-1 rounded flex-1"
+                >
+                  Add Vehicle
+                </button>
+                <button
+                  onClick={() => handleRemoveVehicle(name, document.getElementById(`vehicle-${name}`).value)}
+                  className="bg-red-500 text-white px-3 py-1 rounded flex-1"
+                >
+                  Remove Vehicle
+                </button>
+              </div>
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   );
