@@ -8,46 +8,64 @@ const RoadNetwork = () => {
   const [end, setEnd] = useState('');
   const [route, setRoute] = useState([]);
   const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [loadingVehicles, setLoadingVehicles] = useState({});
 
   useEffect(() => {
     fetchRoads();
   }, []);
 
   const fetchRoads = async () => {
+    setIsLoading(true);
     try {
       const response = await roadNetworkApi.getRoads();
       setRoads(response.data);
     } catch (err) {
       setError('Failed to fetch roads');
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const handleAddVehicle = async (road, vehicleType) => {
+    setLoadingVehicles(prev => ({ ...prev, [road]: 'add' }));
     try {
       await roadNetworkApi.addVehicle({ road, type: vehicleType });
       await fetchRoads();
     } catch (err) {
       setError('Failed to add vehicle');
+    } finally {
+      setLoadingVehicles(prev => ({ ...prev, [road]: null }));
     }
   };
 
   const handleRemoveVehicle = async (road, vehicleType) => {
+    setLoadingVehicles(prev => ({ ...prev, [road]: 'remove' }));
     try {
       await roadNetworkApi.removeVehicle({ road, type: vehicleType });
       await fetchRoads();
     } catch (err) {
       setError('Failed to remove vehicle');
+    } finally {
+      setLoadingVehicles(prev => ({ ...prev, [road]: null }));
     }
   };
 
   const findRoute = async () => {
+    setIsLoading(true);
     try {
       const response = await roadNetworkApi.findRoute(start, end);
       setRoute(response.data.route);
     } catch (err) {
       setError('Failed to find route');
+    } finally {
+      setIsLoading(false);
     }
   };
+
+  const renderLoadingSpinner = () => (
+    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+  );
 
   return (
     <div className="container mx-auto p-4">
@@ -76,9 +94,19 @@ const RoadNetwork = () => {
           </select>
           <button
             onClick={findRoute}
-            className="bg-green-500 text-white px-4 py-2 rounded"
+            disabled={isLoading}
+            className={`${
+              isLoading ? 'bg-green-300' : 'bg-green-500'
+            } text-white px-4 py-2 rounded flex items-center gap-2`}
           >
-            Find Route
+            {isLoading ? (
+              <>
+                {renderLoadingSpinner()}
+                Finding...
+              </>
+            ) : (
+              'Find Route'
+            )}
           </button>
         </div>
         {route && route.length > 0 && (
@@ -121,15 +149,35 @@ const RoadNetwork = () => {
               <div className="flex gap-2">
                 <button
                   onClick={() => handleAddVehicle(name, document.getElementById(`vehicle-${name}`).value)}
-                  className="bg-blue-500 text-white px-3 py-1 rounded flex-1"
+                  disabled={loadingVehicles[name]}
+                  className={`${
+                    loadingVehicles[name] === 'add' ? 'bg-blue-300' : 'bg-blue-500'
+                  } text-white px-3 py-1 rounded flex-1 flex items-center justify-center gap-2`}
                 >
-                  Add Vehicle
+                  {loadingVehicles[name] === 'add' ? (
+                    <>
+                      {renderLoadingSpinner()}
+                      Adding...
+                    </>
+                  ) : (
+                    'Add Vehicle'
+                  )}
                 </button>
                 <button
                   onClick={() => handleRemoveVehicle(name, document.getElementById(`vehicle-${name}`).value)}
-                  className="bg-red-500 text-white px-3 py-1 rounded flex-1"
+                  disabled={loadingVehicles[name]}
+                  className={`${
+                    loadingVehicles[name] === 'remove' ? 'bg-red-300' : 'bg-red-500'
+                  } text-white px-3 py-1 rounded flex-1 flex items-center justify-center gap-2`}
                 >
-                  Remove Vehicle
+                  {loadingVehicles[name] === 'remove' ? (
+                    <>
+                      {renderLoadingSpinner()}
+                      Removing...
+                    </>
+                  ) : (
+                    'Remove Vehicle'
+                  )}
                 </button>
               </div>
             </div>
