@@ -13,11 +13,15 @@ fastify.register(cors, {
 const initialRoads = {
   "NE 42nd Way": { connections: ["NE 42nd St"] },
   "NE 42nd St": { connections: ["NE 42nd Way", "201st Ave NE", "202nd Ave NE", "NE 39th St", "203rd Ave NE"] },
+  "201st Ave NE": { connections: ["NE 42nd St", "NE 44th St"] },
+  "202nd Ave NE": { connections: ["NE 42nd St", "NE 44th St"] },
+  "NE 39th St": { connections: ["NE 39th Ln", "NE 42nd St", "203rd Ave NE", "204th Ave NE"] },
+  "NE 39th Ln": { connections: ["NE 39th St"] },
   "NE 44th St": { connections: ["201st Ave NE", "202nd Ave NE"] },
-  "NE 39th St": { connections: ["NE 39th Ln", "NE 42nd St", "201st Ave NE", "202nd Ave NE", "203rd Ave NE", "204th Ave NE", "206th PI NE"] },
-  "203rd Ave NE": { connections: ["204th Ave NE", "NE 39th St", "202nd Ave NE", "201st Ave NE", "NE 42nd St"] },
+  "203rd Ave NE": { connections: ["204th Ave NE", "NE 39th St", "NE 42nd St"] },
   "204th Ave NE": { connections: ["203rd Ave NE", "NE 39th St", "206th PI NE", "205th PI NE"] },
-  "206th PI NE": { connections: ["NE 39th St", "204th Ave NE"] },
+  "205th PI NE": { connections: ["204th Ave NE"] },
+  "206th PI NE": { connections: ["204th Ave NE"] },
 };
 
 // Initialize roads
