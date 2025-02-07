@@ -52,12 +52,6 @@ const RoadNetwork = () => {
   return (
     <div className="container mx-auto p-4">
       <h1 className="text-2xl font-bold mb-4">Road Network Management</h1>
-      
-      {error && (
-        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
-          {error}
-        </div>
-      )}
 
       <div className="mb-6">
         <h2 className="text-xl font-semibold mb-2 text-center">Find Route</h2>
@@ -104,6 +98,12 @@ const RoadNetwork = () => {
           />
         </div>
       </div>
+
+      {error && (
+        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+          {error}
+        </div>
+      )}
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
         {Object.entries(roads).map(([name, road]) => (
