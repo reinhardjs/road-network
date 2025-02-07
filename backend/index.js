@@ -95,7 +95,7 @@ fastify.get('/route', routeQuerySchema, async (request, reply) => {
 // Start server
 const start = async () => {
   try {
-    await fastify.listen({ port: 5000 });
+    await fastify.listen({ port: 5000, host: '0.0.0.0' });
   } catch (err) {
     fastify.log.error(err);
     process.exit(1);
