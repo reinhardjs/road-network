@@ -55,11 +55,8 @@ class RoadNetwork {
 
         dfs(this.roads[start]);
 
-        // Get shortest path considering congestion
-        const shortestPath = this.findShortestRoute(start, end);
-
         // Compare and return the best route
-        const allRoutes = [...dfsResults, shortestPath].filter(Boolean);
+        const allRoutes = dfsResults.filter(Boolean);
         return allRoutes.sort((a, b) => {
             const aCongestion = this.calculateCongestion(a);
             const bCongestion = this.calculateCongestion(b);
@@ -72,63 +69,6 @@ class RoadNetwork {
             
             return aScore - bScore;
         })[0];
-    }
-
-    findShortestRoute(start, end) {
-        const distances = {};
-        const previous = {};
-        const unvisited = new Set();
-        
-        // Initialize distances
-        Object.keys(this.roads).forEach(roadName => {
-            distances[roadName] = Infinity;
-            previous[roadName] = null;
-            unvisited.add(roadName);
-        });
-        distances[start] = 0;
-
-        while (unvisited.size > 0) {
-            // Find the unvisited node with the smallest distance
-            let current = null;
-            let smallestDistance = Infinity;
-            
-            for (const roadName of unvisited) {
-                if (distances[roadName] < smallestDistance) {
-                    smallestDistance = distances[roadName];
-                    current = roadName;
-                }
-            }
-
-            if (current === null) break;
-            if (current === end) break;
-
-            unvisited.delete(current);
-
-            // Calculate weight for each neighbor
-            for (const neighbor of this.roads[current].connections) {
-                if (!unvisited.has(neighbor.name)) continue;
-
-                // Weight calculation: base distance (1) + neighbor's congestion
-                const weight = 1 + neighbor.congestion;
-                const totalDistance = distances[current] + weight;
-
-                if (totalDistance < distances[neighbor.name]) {
-                    distances[neighbor.name] = totalDistance;
-                    previous[neighbor.name] = current;
-                }
-            }
-        }
-
-        // Reconstruct path
-        const path = [];
-        let current = end;
-
-        while (current !== null) {
-            path.unshift(current);
-            current = previous[current];
-        }
-
-        return path.length > 1 ? path : null;
     }
 
     calculateCongestion(route) {
