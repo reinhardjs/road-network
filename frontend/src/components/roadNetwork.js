@@ -51,10 +51,8 @@ const RoadNetwork = () => {
 
   return (
     <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">Road Network Management</h1>
-
       <div className="mb-6">
-        <h2 className="text-xl font-semibold mb-2 text-center">Find Route</h2>
+        <h1 className="text-3xl font-semibold my-8 text-center">Find Route</h1>
         <div className="flex gap-2 mb-4 justify-center">
           <select
             value={start}
