@@ -95,3 +95,6 @@ The system uses a modified Dijkstra's algorithm that considers both distance and
    npm run dev
    ```
 
+### Test Coverage
+
+![image](https://github.com/user-attachments/assets/e085efa2-3f19-4b3d-9d3d-923e8ec7ae91)
